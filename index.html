@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedRe - Smart EMR</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Login Page -->
+  <div id="login-page" class="page active">
+    <div class="login-box">
+      <h1>MedRe Login</h1>
+      <label for="role">Select Role</label>
+      <select id="role">
+        <option value="doctor">Doctor</option>
+        <option value="patient">Patient</option>
+        <option value="pharmacy">Pharmacy</option>
+      </select>
+      <button onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <!-- Doctor Dashboard -->
+  <div id="doctor-dashboard" class="page">
+    <header>
+      <h2>Doctor Dashboard</h2>
+      <button onclick="logout()">Logout</button>
+    </header>
+    <section>
+      <h3>Add Prescription</h3>
+      <input type="text" id="patient-name" placeholder="Patient Name">
+      <input type="number" id="patient-age" placeholder="Patient Age">
+      <textarea id="prescription" placeholder="Enter prescription here..."></textarea>
+      <button onclick="savePrescription()">Save Prescription</button>
+    </section>
+    <section>
+      <h3>Saved Prescriptions</h3>
+      <ul id="prescription-list"></ul>
+    </section>
+  </div>
+
+  <!-- Patient Dashboard -->
+  <div id="patient-dashboard" class="page">
+    <header>
+      <h2>Patient Dashboard</h2>
+      <button onclick="logout()">Logout</button>
+    </header>
+    <section>
+      <h3>Your Prescriptions</h3>
+      <ul id="patient-prescriptions"></ul>
+    </section>
+  </div>
+
+  <!-- Pharmacy Dashboard -->
+  <div id="pharmacy-dashboard" class="page">
+    <header>
+      <h2>Pharmacy Dashboard</h2>
+      <button onclick="logout()">Logout</button>
+    </header>
+    <section>
+      <h3>All Prescriptions</h3>
+      <ul id="pharmacy-prescriptions"></ul>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
