@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinic EMR System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+    }
+    header {
+      background: #3b82f6;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+    }
+    .hidden {
+      display: none;
+    }
+    .card {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+      border: none;
+      margin-top: 1rem;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    h2 {
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Clinic EMR System</h1>
+  </header>
+
+  <div class="container">
+
+    <!-- Login -->
+    <div id="login" class="card">
+      <h2>Login</h2>
+      <label for="role">Select Role:</label>
+      <select id="role">
+        <option value="assistant">Assistant</option>
+        <option value="doctor">Doctor</option>
+        <option value="pharmacy">Pharmacy</option>
+      </select>
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Assistant Dashboard -->
+    <div id="assistant" class="hidden">
+      <div class="card">
+        <h2>Enter Patient Info</h2>
+        <input type="text" id="aName" placeholder="Patient Name">
+        <input type="number" id="aAge" placeholder="Patient Age">
+        <textarea id="aNotes" placeholder="Initial Notes"></textarea>
+        <button onclick="savePatient()">Save Patient</button>
+      </div>
+    </div>
+
+    <!-- Doctor Dashboard -->
+    <div id="doctor" class="hidden">
+      <div class="card">
+        <h2>Prescribe Medicine</h2>
+        <select id="patientSelect"></select>
+        <div id="medicines"></div>
+        <button onclick="addMedicine()">+ Add Medicine</button>
+        <button onclick="savePrescription()">Save Prescription</button>
+      </div>
+    </div>
+
+    <!-- Pharmacy Dashboard -->
+    <div id="pharmacy" class="hidden">
+      <div class="card">
+        <h2>Patient Prescriptions</h2>
+        <div id="prescriptions"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let patients = [];
+    let prescriptions = {};
+
+    function login() {
+      document.getElementById("login").classList.add("hidden");
+      let role = document.getElementById("role").value;
+      document.getElementById(role).classList.remove("hidden");
+
+      if (role === "doctor") {
+        updatePatientSelect();
+      }
+      if (role === "pharmacy") {
+        renderPrescriptions();
+      }
+    }
+
+    function savePatient() {
+      let name = document.getElementById("aName").value;
+      let age = document.getElementById("aAge").value;
+      let notes = document.getElementById("aNotes").value;
+
+      if (!name || !age) {
+        alert("Enter patient details");
+        return;
+      }
+
+      patients.push({ name, age, notes });
+      alert("Patient saved");
+      document.getElementById("aName").value = "";
+      document.getElementById("aAge").value = "";
+      document.getElementById("aNotes").value = "";
+    }
+
+    function updatePatientSelect() {
+      let select = document.getElementById("patientSelect");
+      select.innerHTML = "";
+      patients.forEach((p, i) => {
+        let opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = `${p.name} (Age: ${p.age})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function addMedicine() {
+      let container = document.getElementById("medicines");
+      let div = document.createElement("div");
+      div.innerHTML = `
+        <input type="text" placeholder="Medicine Name">
+        <input type="text" placeholder="Dosage (e.g. 1 pill)">
+        <input type="text" placeholder="Timing (e.g. Morning, Night)">
+      `;
+      container.appendChild(div);
+    }
+
+    function savePrescription() {
+      let patientIndex = document.getElementById("patientSelect").value;
+      if (patientIndex === "") {
+        alert("Select a patient");
+        return;
+      }
+
+      let meds = [];
+      document.querySelectorAll("#medicines div").forEach(div => {
+        let inputs = div.querySelectorAll("input");
+        if (inputs[0].value) {
+          meds.push({
+            name: inputs[0].value,
+            dosage: inputs[1].value,
+            timing: inputs[2].value
+          });
+        }
+      });
+
+      if (meds.length === 0) {
+        alert("Add at least one medicine");
+        return;
+      }
+
+      prescriptions[patientIndex] = meds;
+      alert("Prescription saved");
+    }
+
+    function renderPrescriptions() {
+      let container = document.getElementById("prescriptions");
+      container.innerHTML = "";
+      patients.forEach((p, i) => {
+        if (prescriptions[i]) {
+          let div = document.createElement("div");
+          div.classList.add("card");
+          div.innerHTML = `<h3>${p.name} (Age: ${p.age})</h3>`;
+          prescriptions[i].forEach(med => {
+            div.innerHTML += `<p>${med.name} - ${med.dosage} - ${med.timing}</p>`;
+          });
+          container.appendChild(div);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
