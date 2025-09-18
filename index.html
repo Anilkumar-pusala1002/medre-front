@@ -1,0 +1,1233 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic EMR System</title>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --gray-color: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Login Page */
+        .login-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Dashboard Layout */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        .sidebar-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar-logout {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logout button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-logout button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            transition: margin-left 0.3s;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: fixed;
+                top: 1rem;
+                left: 1rem;
+                z-index: 101;
+                background: var(--primary-color);
+                color: white;
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        /* Dashboard Content */
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .dashboard-header p {
+            color: var(--gray-color);
+            margin-top: 0.5rem;
+        }
+
+        /* Forms */
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--light-color);
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Buttons */
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        /* Cards for Statistics */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+        }
+
+        /* Placeholder for graphs */
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-color);
+            font-style: italic;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .alert-error {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        /* Loading state */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hide elements */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-success {
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        .text-warning {
+            color: var(--warning-color);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <h2>Clinic EMR System</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="assistant">Assistant</option>
+                        <option value="doctor">Doctor</option>
+                        <option value="pharmacy">Pharmacy</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Layout -->
+    <div id="dashboard" class="container hidden">
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn">☰</button>
+        
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Clinic EMR</h3>
+                <p id="user-role">Role: Assistant</p>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="#" data-page="assistant" id="assistant-link">Assistant</a></li>
+                    <li><a href="#" data-page="doctor" id="doctor-link">Doctor</a></li>
+                    <li><a href="#" data-page="pharmacy" id="pharmacy-link">Pharmacy</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-logout">
+                <button id="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="main-content">
+            <!-- Assistant Dashboard -->
+            <div id="assistant-dashboard" class="dashboard-page">
+                <div class="dashboard-header">
+                    <h2>Patient Registration</h2>
+                    <p>Enter patient details for registration</p>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <h3 id="total-patients">0</h3>
+                        <p>Total Patients</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="today-registrations">0</h3>
+                        <p>Today's Registrations</p>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    Patient Statistics Graph (Placeholder)
+                </div>
+                
+                <div class="form-container">
+                    <form id="patient-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patient-name">Full Name</label>
+                                <input type="text" id="patient-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patient-age">Age</label>
+                                <input type="number" id="patient-age" name="age" min="0" max="150" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patient-gender">Gender</label>
+                                <select id="patient-gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="patient-phone">Phone Number</label>
+                                <input type="tel" id="patient-phone" name="phone" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="patient-diagnosis">Diagnosis</label>
+                                <input type="text" id="patient-diagnosis" name="diagnosis" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="patient-address">Address</label>
+                                <input type="text" id="patient-address" name="address">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="patient-notes">Additional Notes</label>
+                            <textarea id="patient-notes" name="notes" rows="3"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="reset-patient-form">Reset</button>
+                            <button type="submit" class="btn" id="submit-patient-form">Register Patient</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="alert alert-success hidden" id="patient-success-alert">
+                    Patient registered successfully!
+                </div>
+                
+                <div class="alert alert-error hidden" id="patient-error-alert">
+                    Error registering patient. Please try again.
+                </div>
+                
+                <div class="loading" id="patient-loading">
+                    <div class="spinner"></div>
+                    <p>Registering patient...</p>
+                </div>
+            </div>
+
+            <!-- Doctor Dashboard -->
+            <div id="doctor-dashboard" class="dashboard-page hidden">
+                <div class="dashboard-header">
+                    <h2>Doctor Dashboard</h2>
+                    <p>Add prescriptions for patients</p>
+                </div>
+                
+                <div class="chart-container">
+                    Appointment Schedule Graph (Placeholder)
+                </div>
+                
+                <div class="table-container">
+                    <h3>Patient List</h3>
+                    <table id="patients-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Diagnosis</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patients-table-body">
+                            <!-- Patient data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="prescription-form-container" class="form-container hidden">
+                    <h3>Add Prescription for <span id="patient-name-display"></span></h3>
+                    <form id="prescription-form">
+                        <input type="hidden" id="patient-id" name="patientId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medicine-name">Medicine Name</label>
+                                <input type="text" id="medicine-name" name="medicineName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dosage">Dosage</label>
+                                <input type="text" id="dosage" name="dosage" placeholder="e.g., 1 tablet" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Timing</label>
+                            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" name="timing" value="morning"> Morning
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" name="timing" value="afternoon"> Afternoon
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="checkbox" name="timing" value="night"> Night
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="diet-advice">Diet Advice</label>
+                            <textarea id="diet-advice" name="dietAdvice" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Duration (days)</label>
+                            <input type="number" id="duration" name="duration" min="1" value="7">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancel-prescription">Cancel</button>
+                            <button type="submit" class="btn" id="submit-prescription">Add Prescription</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="alert alert-success hidden" id="prescription-success-alert">
+                    Prescription added successfully!
+                </div>
+                
+                <div class="alert alert-error hidden" id="prescription-error-alert">
+                    Error adding prescription. Please try again.
+                </div>
+                
+                <div class="loading" id="prescription-loading">
+                    <div class="spinner"></div>
+                    <p>Adding prescription...</p>
+                </div>
+            </div>
+
+            <!-- Pharmacy Dashboard -->
+            <div id="pharmacy-dashboard" class="dashboard-page hidden">
+                <div class="dashboard-header">
+                    <h2>Pharmacy Dashboard</h2>
+                    <p>Dispense medicines for patients</p>
+                </div>
+                
+                <div class="chart-container">
+                    Medicine Inventory Graph (Placeholder)
+                </div>
+                
+                <div class="table-container">
+                    <h3>Prescriptions to Dispense</h3>
+                    <table id="prescriptions-table">
+                        <thead>
+                            <tr>
+                                <th>Patient Name</th>
+                                <th>Medicine</th>
+                                <th>Dosage</th>
+                                <th>Timing</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prescriptions-table-body">
+                            <!-- Prescription data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="alert alert-success hidden" id="dispense-success-alert">
+                    Prescription marked as dispensed!
+                </div>
+                
+                <div class="alert alert-error hidden" id="dispense-error-alert">
+                    Error updating prescription status. Please try again.
+                </div>
+                
+                <div class="loading" id="dispense-loading">
+                    <div class="spinner"></div>
+                    <p>Updating prescription status...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const dashboard = document.getElementById('dashboard');
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userRoleDisplay = document.getElementById('user-role');
+        
+        // Login Form
+        const loginForm = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const roleSelect = document.getElementById('role');
+        
+        // Assistant Dashboard
+        const assistantDashboard = document.getElementById('assistant-dashboard');
+        const patientForm = document.getElementById('patient-form');
+        const resetPatientFormBtn = document.getElementById('reset-patient-form');
+        const submitPatientFormBtn = document.getElementById('submit-patient-form');
+        const patientSuccessAlert = document.getElementById('patient-success-alert');
+        const patientErrorAlert = document.getElementById('patient-error-alert');
+        const patientLoading = document.getElementById('patient-loading');
+        const totalPatientsStat = document.getElementById('total-patients');
+        const todayRegistrationsStat = document.getElementById('today-registrations');
+        
+        // Doctor Dashboard
+        const doctorDashboard = document.getElementById('doctor-dashboard');
+        const patientsTableBody = document.getElementById('patients-table-body');
+        const prescriptionFormContainer = document.getElementById('prescription-form-container');
+        const prescriptionForm = document.getElementById('prescription-form');
+        const patientNameDisplay = document.getElementById('patient-name-display');
+        const patientIdInput = document.getElementById('patient-id');
+        const cancelPrescriptionBtn = document.getElementById('cancel-prescription');
+        const submitPrescriptionBtn = document.getElementById('submit-prescription');
+        const prescriptionSuccessAlert = document.getElementById('prescription-success-alert');
+        const prescriptionErrorAlert = document.getElementById('prescription-error-alert');
+        const prescriptionLoading = document.getElementById('prescription-loading');
+        
+        // Pharmacy Dashboard
+        const pharmacyDashboard = document.getElementById('pharmacy-dashboard');
+        const prescriptionsTableBody = document.getElementById('prescriptions-table-body');
+        const dispenseSuccessAlert = document.getElementById('dispense-success-alert');
+        const dispenseErrorAlert = document.getElementById('dispense-error-alert');
+        const dispenseLoading = document.getElementById('dispense-loading');
+        
+        // Navigation Links
+        const assistantLink = document.getElementById('assistant-link');
+        const doctorLink = document.getElementById('doctor-link');
+        const pharmacyLink = document.getElementById('pharmacy-link');
+        
+        // Mock data for demonstration
+        let mockPatients = [
+            { id: 1, name: "John Doe", age: 35, gender: "male", phone: "123-456-7890", diagnosis: "Flu", address: "123 Main St", notes: "No allergies", createdAt: new Date().toISOString() },
+            { id: 2, name: "Jane Smith", age: 28, gender: "female", phone: "098-765-4321", diagnosis: "Headache", address: "456 Oak Ave", notes: "Pregnant", createdAt: new Date().toISOString() },
+            { id: 3, name: "Robert Johnson", age: 45, gender: "male", phone: "555-123-4567", diagnosis: "Diabetes", address: "789 Pine Rd", notes: "Type 2", createdAt: new Date().toISOString() }
+        ];
+        
+        let mockPrescriptions = [
+            { id: 1, patientId: 1, patientName: "John Doe", medicineName: "Paracetamol", dosage: "500mg", timing: ["morning", "night"], dietAdvice: "Drink plenty of water", duration: 5, status: "pending", createdAt: new Date().toISOString() },
+            { id: 2, patientId: 2, patientName: "Jane Smith", medicineName: "Ibuprofen", dosage: "200mg", timing: ["morning", "afternoon", "night"], dietAdvice: "Take with food", duration: 3, status: "pending", createdAt: new Date().toISOString() },
+            { id: 3, patientId: 3, patientName: "Robert Johnson", medicineName: "Metformin", dosage: "1000mg", timing: ["morning", "night"], dietAdvice: "Avoid sugary foods", duration: 30, status: "dispensed", createdAt: new Date().toISOString() }
+        ];
+        
+        // Current user role
+        let currentUserRole = null;
+        
+        // Login Form Submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            const role = roleSelect.value;
+            
+            if (!username || !password || !role) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // In a real app, you would validate credentials with the backend
+            // For demo purposes, we'll just accept any input
+            currentUserRole = role;
+            sessionStorage.setItem('userRole', role);
+            sessionStorage.setItem('isLoggedIn', 'true');
+            
+            // Show dashboard and hide login page
+            loginPage.classList.add('hidden');
+            dashboard.classList.remove('hidden');
+            
+            // Update UI based on role
+            updateUserInterface();
+            
+            // Load initial data
+            loadDashboardData();
+        });
+        
+        // Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            sessionStorage.removeItem('userRole');
+            sessionStorage.removeItem('isLoggedIn');
+            currentUserRole = null;
+            
+            // Show login page and hide dashboard
+            dashboard.classList.add('hidden');
+            loginPage.classList.remove('hidden');
+            
+            // Reset forms
+            patientForm.reset();
+            prescriptionForm.reset();
+            
+            // Hide alerts
+            hideAllAlerts();
+        });
+        
+        // Mobile menu toggle
+        mobileMenuBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+        });
+        
+        // Navigation between dashboards
+        assistantLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'assistant') {
+                alert('You do not have permission to access the Assistant dashboard');
+                return;
+            }
+            showDashboard('assistant');
+        });
+        
+        doctorLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'doctor') {
+                alert('You do not have permission to access the Doctor dashboard');
+                return;
+            }
+            showDashboard('doctor');
+            loadPatientsList();
+        });
+        
+        pharmacyLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (currentUserRole !== 'pharmacy') {
+                alert('You do not have permission to access the Pharmacy dashboard');
+                return;
+            }
+            showDashboard('pharmacy');
+            loadPrescriptionsList();
+        });
+        
+        // Patient Registration Form
+        patientForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const patientData = {
+                name: document.getElementById('patient-name').value,
+                age: parseInt(document.getElementById('patient-age').value),
+                gender: document.getElementById('patient-gender').value,
+                phone: document.getElementById('patient-phone').value,
+                diagnosis: document.getElementById('patient-diagnosis').value,
+                address: document.getElementById('patient-address').value,
+                notes: document.getElementById('patient-notes').value,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Show loading state
+            showLoading('patient');
+            
+            // Simulate API call
+            setTimeout(() => {
+                // For demo, simulate success
+                const newPatient = {
+                    ...patientData,
+                    id: mockPatients.length > 0 ? Math.max(...mockPatients.map(p => p.id)) + 1 : 1
+                };
+                
+                mockPatients.push(newPatient);
+                
+                // Hide loading, show success
+                hideLoading('patient');
+                showSuccessAlert('patient');
+                
+                // Reset form
+                patientForm.reset();
+                
+                // Update stats
+                updateStats();
+                
+                // If doctor is logged in, update their patient list
+                if (currentUserRole === 'doctor') {
+                    loadPatientsList();
+                }
+                
+                // If pharmacy needs to be updated, you would do that here
+            }, 1000);
+        });
+        
+        // Reset Patient Form
+        resetPatientFormBtn.addEventListener('click', function() {
+            patientForm.reset();
+        });
+        
+        // Prescription Form
+        prescriptionForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get selected timing checkboxes
+            const timingCheckboxes = Array.from(prescriptionForm.querySelectorAll('input[name="timing"]:checked'));
+            const timing = timingCheckboxes.map(cb => cb.value);
+            
+            // Get form data
+            const prescriptionData = {
+                patientId: parseInt(patientIdInput.value),
+                patientName: patientNameDisplay.textContent,
+                medicineName: document.getElementById('medicine-name').value,
+                dosage: document.getElementById('dosage').value,
+                timing: timing,
+                dietAdvice: document.getElementById('diet-advice').value,
+                duration: parseInt(document.getElementById('duration').value) || 7,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+            
+            // Validate timing
+            if (timing.length === 0) {
+                alert('Please select at least one timing');
+                return;
+            }
+            
+            // Show loading state
+            showLoading('prescription');
+            
+            // Simulate API call
+            setTimeout(() => {
+                // For demo, simulate success
+                const newPrescription = {
+                    ...prescriptionData,
+                    id: mockPrescriptions.length > 0 ? Math.max(...mockPrescriptions.map(p => p.id)) + 1 : 1
+                };
+                
+                mockPrescriptions.push(newPrescription);
+                
+                // Hide loading, show success
+                hideLoading('prescription');
+                showSuccessAlert('prescription');
+                
+                // Hide prescription form and show patient list
+                prescriptionFormContainer.classList.add('hidden');
+                prescriptionForm.reset();
+                
+                // Update pharmacy dashboard if needed
+                if (currentUserRole === 'pharmacy') {
+                    loadPrescriptionsList();
+                }
+            }, 1000);
+        });
+        
+        // Cancel Prescription
+        cancelPrescriptionBtn.addEventListener('click', function() {
+            prescriptionFormContainer.classList.add('hidden');
+            prescriptionForm.reset();
+        });
+        
+        // Function to show dashboard based on role
+        function showDashboard(page) {
+            // Hide all dashboards
+            assistantDashboard.classList.add('hidden');
+            doctorDashboard.classList.add('hidden');
+            pharmacyDashboard.classList.add('hidden');
+            
+            // Remove active class from all links
+            assistantLink.classList.remove('active');
+            doctorLink.classList.remove('active');
+            pharmacyLink.classList.remove('active');
+            
+            // Show selected dashboard and set active link
+            if (page === 'assistant') {
+                assistantDashboard.classList.remove('hidden');
+                assistantLink.classList.add('active');
+            } else if (page === 'doctor') {
+                doctorDashboard.classList.remove('hidden');
+                doctorLink.classList.add('active');
+                loadPatientsList();
+            } else if (page === 'pharmacy') {
+                pharmacyDashboard.classList.remove('hidden');
+                pharmacyLink.classList.add('active');
+                loadPrescriptionsList();
+            }
+            
+            // Close mobile menu if open
+            sidebar.classList.remove('active');
+        }
+        
+        // Function to update UI based on user role
+        function updateUserInterface() {
+            // Update user role display
+            userRoleDisplay.textContent = `Role: ${currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1)}`;
+            
+            // Show/hide navigation links based on role
+            if (currentUserRole === 'assistant') {
+                assistantLink.style.display = 'block';
+                doctorLink.style.display = 'none';
+                pharmacyLink.style.display = 'none';
+                showDashboard('assistant');
+            } else if (currentUserRole === 'doctor') {
+                assistantLink.style.display = 'none';
+                doctorLink.style.display = 'block';
+                pharmacyLink.style.display = 'none';
+                showDashboard('doctor');
+            } else if (currentUserRole === 'pharmacy') {
+                assistantLink.style.display = 'none';
+                doctorLink.style.display = 'none';
+                pharmacyLink.style.display = 'block';
+                showDashboard('pharmacy');
+            }
+        }
+        
+        // Function to load dashboard data
+        function loadDashboardData() {
+            updateStats();
+            
+            if (currentUserRole === 'doctor') {
+                loadPatientsList();
+            } else if (currentUserRole === 'pharmacy') {
+                loadPrescriptionsList();
+            }
+        }
+        
+        // Function to update statistics
+        function updateStats() {
+            totalPatientsStat.textContent = mockPatients.length;
+            
+            // Count today's registrations
+            const today = new Date();
+            const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const todayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            
+            const todayRegistrations = mockPatients.filter(patient => {
+                const patientDate = new Date(patient.createdAt);
+                return patientDate >= todayStart && patientDate < todayEnd;
+            }).length;
+            
+            todayRegistrationsStat.textContent = todayRegistrations;
+        }
+        
+        // Function to load patients list for doctor
+        function loadPatientsList() {
+            patientsTableBody.innerHTML = '';
+            
+            if (mockPatients.length === 0) {
+                patientsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem;">No patients registered yet</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            mockPatients.forEach(patient => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${patient.id}</td>
+                    <td>${patient.name}</td>
+                    <td>${patient.age}</td>
+                    <td>${patient.gender.charAt(0).toUpperCase() + patient.gender.slice(1)}</td>
+                    <td>${patient.diagnosis}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success add-prescription-btn" data-patient-id="${patient.id}" data-patient-name="${patient.name}">
+                            Add Prescription
+                        </button>
+                    </td>
+                `;
+                patientsTableBody.appendChild(row);
+            });
+            
+            // Add event listeners to prescription buttons
+            document.querySelectorAll('.add-prescription-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const patientId = this.getAttribute('data-patient-id');
+                    const patientName = this.getAttribute('data-patient-name');
+                    
+                    // Show prescription form
+                    patientNameDisplay.textContent = patientName;
+                    patientIdInput.value = patientId;
+                    prescriptionFormContainer.classList.remove('hidden');
+                });
+            });
+        }
+        
+        // Function to load prescriptions for pharmacy
+        function loadPrescriptionsList() {
+            prescriptionsTableBody.innerHTML = '';
+            
+            if (mockPrescriptions.length === 0) {
+                prescriptionsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">No prescriptions available</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Filter for pending prescriptions (or show all for demo)
+            const prescriptionsToShow = mockPrescriptions;
+            
+            prescriptionsToShow.forEach(prescription => {
+                const timingDisplay = prescription.timing.join(', ');
+                const statusClass = prescription.status === 'dispensed' ? 'text-success' : 'text-warning';
+                const statusText = prescription.status === 'dispensed' ? 'Dispensed' : 'Pending';
+                const dispenseBtn = prescription.status === 'dispensed' ? 
+                    '<button class="btn btn-sm btn-secondary" disabled>Already Dispensed</button>' :
+                    `<button class="btn btn-sm btn-success dispense-btn" data-prescription-id="${prescription.id}">Mark as Dispensed</button>`;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${prescription.patientName}</td>
+                    <td>${prescription.medicineName}</td>
+                    <td>${prescription.dosage}</td>
+                    <td>${timingDisplay}</td>
+                    <td>${prescription.duration} days</td>
+                    <td class="${statusClass}">${statusText}</td>
+                    <td>${dispenseBtn}</td>
+                `;
+                prescriptionsTableBody.appendChild(row);
+            });
+            
+            // Add event listeners to dispense buttons
+            document.querySelectorAll('.dispense-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const prescriptionId = parseInt(this.getAttribute('data-prescription-id'));
+                    
+                    // Show loading state
+                    showLoading('dispense');
+                    
+                    // Simulate API call
+                    setTimeout(() => {
+                        // For demo, update mock data
+                        const prescriptionIndex = mockPrescriptions.findIndex(p => p.id === prescriptionId);
+                        if (prescriptionIndex !== -1) {
+                            mockPrescriptions[prescriptionIndex].status = 'dispensed';
+                        }
+                        
+                        // Hide loading, show success
+                        hideLoading('dispense');
+                        showSuccessAlert('dispense');
+                        
+                        // Reload prescriptions list
+                        loadPrescriptionsList();
+                    }, 1000);
+                });
+            });
+        }
+        
+        // Helper functions for alerts and loading states
+        function showLoading(type) {
+            if (type === 'patient') {
+                patientLoading.classList.add('active');
+                submitPatientFormBtn.disabled = true;
+            } else if (type === 'prescription') {
+                prescriptionLoading.classList.add('active');
+                submitPrescriptionBtn.disabled = true;
+            } else if (type === 'dispense') {
+                dispenseLoading.classList.add('active');
+            }
+        }
+        
+        function hideLoading(type) {
+            if (type === 'patient') {
+                patientLoading.classList.remove('active');
+                submitPatientFormBtn.disabled = false;
+            } else if (type === 'prescription') {
+                prescriptionLoading.classList.remove('active');
+                submitPrescriptionBtn.disabled = false;
+            } else if (type === 'dispense') {
+                dispenseLoading.classList.remove('active');
+            }
+        }
+        
+        function showSuccessAlert(type) {
+            hideAllAlerts();
+            
+            if (type === 'patient') {
+                patientSuccessAlert.classList.remove('hidden');
+                setTimeout(() => {
+                    patientSuccessAlert.classList.add('hidden');
+                }, 3000);
+            } else if (type === 'prescription') {
+                prescriptionSuccessAlert.classList.remove('hidden');
+                setTimeout(() => {
+                    prescriptionSuccessAlert.classList.add('hidden');
+                }, 3000);
+            } else if (type === 'dispense') {
+                dispenseSuccessAlert.classList.remove('hidden');
+                setTimeout(() => {
+                    dispenseSuccessAlert.classList.add('hidden');
+                }, 3000);
+            }
+        }
+        
+        function showErrorAlert(type) {
+            hideAllAlerts();
+            
+            if (type === 'patient') {
+                patientErrorAlert.classList.remove('hidden');
+            } else if (type === 'prescription') {
+                prescriptionErrorAlert.classList.remove('hidden');
+            } else if (type === 'dispense') {
+                dispenseErrorAlert.classList.remove('hidden');
+            }
+        }
+        
+        function hideAllAlerts() {
+            patientSuccessAlert.classList.add('hidden');
+            patientErrorAlert.classList.add('hidden');
+            prescriptionSuccessAlert.classList.add('hidden');
+            prescriptionErrorAlert.classList.add('hidden');
+            dispenseSuccessAlert.classList.add('hidden');
+            dispenseErrorAlert.classList.add('hidden');
+        }
+        
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const savedRole = sessionStorage.getItem('userRole');
+            
+            if (isLoggedIn === 'true' && savedRole) {
+                currentUserRole = savedRole;
+                loginPage.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+                updateUserInterface();
+                loadDashboardData();
+            }
+        });
+    </script>
+</body>
+</html>
+```
